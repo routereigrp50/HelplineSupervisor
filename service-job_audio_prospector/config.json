@@ -1,0 +1,33 @@
+{
+    "api":{
+        "ip":"0.0.0.0",
+        "port":5001
+    },
+    
+    "job":{
+        "audio_file_path":"./",
+        "audio_file_extension":"wav",
+        "scanning_interval":180
+    },
+
+    "database":{
+        "mongo_db_uri":"mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0"
+    },
+
+    "logging":{
+        "debugging":true,
+        "stdout":{
+            "console":{
+                "state":true
+            },
+            "file":{
+                "state":true,
+                "file_path":"./audioprospector.log"
+            },
+            "database":{
+                "state":true,
+                "mongo_db_uri":"mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0"
+            }
+        }
+    }
+}

@@ -1,0 +1,13 @@
+services:
+  api_gateway:
+    build: ./service-api_gateway
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
