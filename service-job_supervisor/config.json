@@ -9,17 +9,17 @@
     },
 
     "logging":{
-        "debugging":true,
+        "debugging":false,
         "stdout":{
             "console":{
                 "state":true
             },
             "file":{
-                "state":true,
+                "state":false,
                 "file_path":"./log.log"
             },
             "database":{
-                "state":true,
+                "state":false,
                 "mongo_db_uri":"mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0"
             }
         }

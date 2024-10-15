@@ -1,6 +1,6 @@
 services:
   api_gateway:
-    build: ./service-api_gateway
+    build: ./service-job_supervisor
     environment:
       - PYTHONUNBUFFERED=1
     ports:

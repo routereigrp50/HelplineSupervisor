@@ -10,7 +10,7 @@ class Logging:
     _stdout_db = False
     _stdout_file_path = ""
     _db_private_client = None
-    _service_name = "job_audio_prospector"
+    _service_name = "job_supervisor"
 
     @classmethod
     def create_log(cls, severity: int, announcer: str, log: str) -> None:

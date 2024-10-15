@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY /handlers /app/handlers
 COPY /tools /app/tools
+COPY job_supervisor.py /app/job_supervisor.py
 COPY /run.py /app/run.py
 COPY /config.json /app/config.json
 COPY /requirements.txt /app/requirements.txt
