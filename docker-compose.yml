@@ -1,10 +1,18 @@
 services:
-  api_gateway:
+  job_supervisor:
     build: ./service-job_supervisor
     environment:
       - PYTHONUNBUFFERED=1
     ports:
       - "5000:5000"
+    networks:
+      - app-network
+  job-audio_prospector:
+    build: ./service-job-audio_prospector
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5001:5001"
     networks:
       - app-network
 
