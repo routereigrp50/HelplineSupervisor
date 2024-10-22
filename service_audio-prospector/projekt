@@ -1,7 +1,0 @@
-run tworzy obiekt i uruchamia job. Pytanie gdzie api? W run, w api handler czy w samym jobie. Chyba najlepiej jakby był w jobie.
-Wtedy inicializacja z poziomu run a nastepnie wewnętrzna funkcja init w klasie która doda status do bazy danych. 
-
-Pytania.
-1. Gdzie api?
-2. Config joba lokalnie z pliku czy przy próbie odpalenia?
-3. Odpytując supervisora xwracać konfig z db czy lokalny?
