@@ -9,4 +9,4 @@ COPY /run.py /app/run.py
 COPY /requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
-CMD ['python','audio_prospector.py']
+CMD ["python","run.py"]
