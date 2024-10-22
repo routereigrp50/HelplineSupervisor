@@ -8,7 +8,7 @@ class Logging:
     _stdout_console = True
     _stdout_file = False
     _stdout_db = False
-    _stdout_file_path = ""
+    _stdout_file_path = None
     _db_private_client = None
     _service_name = "audio_prospector"
 

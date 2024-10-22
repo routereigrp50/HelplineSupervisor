@@ -12,17 +12,17 @@
 
     "logging":{
         "global":{
-            "debugging":false,
+            "debugging":true,
             "stdout":{
                 "console":{
                     "state":true
                 },
                 "database":{
-                    "state":false
+                    "state":true
                 },
                 "file":{
-                    "state":false,
-                    "file_path":"./log.log"
+                    "state":true,
+                    "file_path":"./log_buffer.log"
                 }
             }
         },
