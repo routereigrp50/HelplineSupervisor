@@ -1,14 +1,8 @@
 services:
-  job_supervisor:
-    build: ./service-job_supervisor
-    environment:
-      - PYTHONUNBUFFERED=1
-    ports:
-      - "5000:5000"
-    networks:
-      - app-network
   job-audio_prospector:
     build: ./service-job-audio_prospector
+    volumes:
+      - ./shared:/app/shared
     environment:
       - PYTHONUNBUFFERED=1
     ports:

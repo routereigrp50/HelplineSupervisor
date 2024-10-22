@@ -1,0 +1,33 @@
+{
+    "api":{
+        "audio_prospector":{
+            "ip":"0.0.0.0",
+            "port":5001
+        }
+    },
+
+    "database":{
+        "mongo_db_uri":"mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0"
+    },
+
+    "logging":{
+        "global":{
+            "debugging":false,
+            "stdout":{
+                "console":{
+                    "state":true
+                },
+                "database":{
+                    "state":false
+                },
+                "file":{
+                    "state":false,
+                    "file_path":"./log.log"
+                }
+            }
+        },
+        "local":{
+            "audio_prospector":{}
+        }
+    }
+}
