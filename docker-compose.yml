@@ -1,6 +1,6 @@
 services:
   job-audio_prospector:
-    build: ./service-job-audio_prospector
+    build: ./service-audio_prospector
     volumes:
       - ./shared:/app/shared
     environment:
