@@ -38,8 +38,8 @@ class Database:
             return (False, f"Database connection failed. Reason: Unknown - {str(e)}")
             
 
-    @retry(2)
-    @classmethod
+    @classmethod 
+    @retry(2)   
     def insert_one(cls, collection_name: str, data_to_insert: dict) -> tuple:
         '''Insert one entry into database collection'''
         h_log.create_log(5, "handlers.database.insert_one", f"Attempting to insert data into collection '{collection_name}'")
@@ -51,9 +51,23 @@ class Database:
         except Exception as e:
             h_log.create_log(2, "handlers.database.insert_one", f"Failed to insert data into collection '{collection_name}'. Reason: {str(e)}")
             return (False, f"Failed to insert data into collection '{collection_name}'. Reason: {str(e)}")
+        
+    @classmethod 
+    @retry(2)   
+    def insert_many(cls, collection_name: str, data_to_insert: list) -> tuple:
+        '''Insert many entry into database collection'''
+        h_log.create_log(5, "handlers.database.inser_many", f"Attempting to insert data into collection '{collection_name}'")
+        try:
+            collection = cls._client['HelplineSupervisor'][collection_name]
+            result = collection.insert_many(data_to_insert, ordered=False)
+            h_log.create_log(5, "handlers.database.inser_many", f"Successfully inserted data into collection '{collection_name}'")
+            return (True, None)
+        except Exception as e:
+            h_log.create_log(2, "handlers.database.inser_many", f"Failed to insert data into collection '{collection_name}'. Reason: {str(e)}")
+            return (False, f"Failed to insert data into collection '{collection_name}'. Reason: {str(e)}")
     
-    @retry(2)
-    @classmethod
+    @classmethod 
+    @retry(2)   
     def update_one(cls, collection_name: str, data_to_update: dict, upsert: bool = True) -> tuple:
         '''Update one entry in database collection'''
         h_log.create_log(5, "handlers.database.update_one", f"Attempting to update data into collection '{collection_name}'")
@@ -78,7 +92,7 @@ class Database:
             else:
                 h_log.create_log(5, "handlers.database.get_collection", f"Attempting to get collection '{collection_name}'")
                 result = list(collection.find())
-            
+
             if len(result) > 0:
                 for item in result:
                     item['id'] = str(item["_id"])
