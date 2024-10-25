@@ -85,7 +85,7 @@ class AudioProspector:
                 h_log.create_log(3, "audio_prospector._api_routing", f"ENOK: API hit no. {self._api_hit_counter} post /api/audioprospector/stop")
                 self._api_hit_counter+=1
                 return JSONResponse(content={"status":"NOK","content":str(stop_error_msg)},status_code=400)
-            h_log.create_log(3, "audio_prospector._api_routing", f"EOK: API hit no. {self._api_hit_counter} post /api/audioprospector/stop")
+            h_log.create_log(4, "audio_prospector._api_routing", f"EOK: API hit no. {self._api_hit_counter} post /api/audioprospector/stop")
             self._api_hit_counter+=1
             return JSONResponse(content={"status":"OK","content":""},status_code=201)
         

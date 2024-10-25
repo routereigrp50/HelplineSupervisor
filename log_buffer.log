@@ -1,0 +1,44 @@
+2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
+2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 14:52:56 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 14:52:56 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
+2024/10/25 14:52:56 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
+2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
+2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:23 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:23 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
+2024/10/25 15:05:23 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
+2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
+2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:49 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:05:49 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
+2024/10/25 15:05:49 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
+2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
+2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:06:06 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/25 15:06:06 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
+2024/10/25 15:06:06 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
+2024/10/25 15:06:06 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._api_start | Passing configuration to api object and startning api server
+2024/10/25 15:06:20 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 1 get /api/speechrecognizer/status
+2024/10/25 15:06:20 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 1 get /api/speechrecognizer/status
+2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 2 post /api/speechrecognizer/start
+2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to start job with configuration: {'azure_api_key': 'string', 'azure_region': 'string', 'azure_language': 'string', 'max_simultaneous_connections': 0}
+2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to verify current job status
+2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Current job status is IDLE
+2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Creating job thread
+2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Starting job thread
+2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Successfully started job with configuration: {'azure_api_key': 'string', 'azure_region': 'string', 'azure_language': 'string', 'max_simultaneous_connections': 0}
+2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 2 post /api/speechrecognizer/start
+2024/10/25 15:06:35 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 3 get /api/speechrecognizer/status
+2024/10/25 15:06:35 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 3 get /api/speechrecognizer/status
+2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 4 post /api/speechrecognizer/stop
+2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Attempting to stop job
+2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Attempting to verify current job status
+2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Current job status is RUNNING
+2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Setting job flag indicator to False
+2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Successfully stoped job
+2024/10/25 15:06:45 | WARN @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 4 post /api/speechrecognizer/stop
