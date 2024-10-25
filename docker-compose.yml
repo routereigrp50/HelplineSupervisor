@@ -9,6 +9,16 @@ services:
       - "5001:5001"
     networks:
       - app-network
+  job-speech_recognizer:
+    build: ./service-speech_recognizer
+    volumes:
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5002:5002"
+    networks:
+      - app-network
 
 networks:
   app-network:
