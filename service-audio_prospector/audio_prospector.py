@@ -153,14 +153,14 @@ class AudioProspector:
                                 list_of_files.append(formated_path)
                 else:
                     h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to scan for audio files. Reason: Configured audio path {self._job_configuration['path']} does not exist")
-                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*self._job_configuration['scanning_interval']}. Time extended due to NOK")
+                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                     time.sleep(self._job_error_counter*10)
                     self._job_loop_counter+=1
                     self._job_error_counter+=1
                     continue
             except Exception as e:
                 h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to scan for audio files. Reason:{str(e)}")
-                h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*self._job_configuration['scanning_interval']}. Time extended due to NOK")
+                h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                 time.sleep(self._job_error_counter*10)
                 self._job_loop_counter+=1
                 self._job_error_counter+=1
@@ -173,7 +173,7 @@ class AudioProspector:
             db_result, db_content = h_db.get_collection("ap_last_scan")
             if not db_result:
                 h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to get last scan from database")
-                h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*self._job_configuration['scanning_interval']}. Time extended due to NOK")
+                h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                 time.sleep(self._job_error_counter*10)
                 self._job_loop_counter+=1
                 self._job_error_counter+=1
@@ -201,11 +201,11 @@ class AudioProspector:
                 #IF THERE IS DIFFERENCE
                 h_log.create_log(5, "audio_prospector.__job_loop", f"Successfully calculated difference between local and last scan. Result: {len(difference)} new files")
                 h_log.create_log(5, "audio_prospector.__job_loop", f"Attempting to fill database collections")
-                q_save_result, q_save_content = self.__save_files_in_db("ap_queue",difference)
+                q_save_result, q_save_content = self.__save_files_in_db("ap_results",difference)
                 ls_save_result, ls_save_content = self.__save_files_in_db("ap_last_scan",difference)
                 if not q_save_result or not ls_save_result:
                     h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to fill database collection")
-                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*self._job_configuration['scanning_interval']}. Time extended due to NOK")
+                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                     time.sleep(self._job_error_counter*10)
                     self._job_loop_counter+=1
                     self._job_error_counter+=1
@@ -218,11 +218,11 @@ class AudioProspector:
             else: #IF LAST SCAN DONT EXIST
                 h_log.create_log(5, "audio_prospector.__job_loop", f"No files found in last scan dabatase collection")
                 h_log.create_log(5, "audio_prospector.__job_loop", f"Attempting to save current scan to queue and last scan database collections")
-                q_save_result, q_save_content = self.__save_files_in_db("ap_queue", list_of_files)
+                q_save_result, q_save_content = self.__save_files_in_db("ap_results", list_of_files)
                 ls_save_result, ls_save_content = self.__save_files_in_db("ap_last_scan", list_of_files)
                 if not q_save_result or not ls_save_result:
                     h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to fill database collection")
-                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*self._job_configuration['scanning_interval']}. Time extended due to NOK")
+                    h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                     time.sleep(self._job_error_counter*10)
                     self._job_loop_counter+=1
                     self._job_error_counter+=1
@@ -239,7 +239,12 @@ class AudioProspector:
         '''
         current_timestamp = datetime.now(timezone.utc)
         formated_list_of_files = []
-        for item in list_of_files:
-            formated_list_of_files.append({"path":item,"timestamp":current_timestamp})
+        match db_collection_name:
+            case "ap_results":
+                for item in list_of_files:
+                    formated_list_of_files.append({"path":item,"timestamp":current_timestamp,"attempts":0})
+            case "ap_last_scan":
+                for item in list_of_files:
+                    formated_list_of_files.append({"path":item,"timestamp":current_timestamp})
         insert_result, insert_content = h_db.insert_many(db_collection_name,formated_list_of_files)
         return (insert_result, insert_content)

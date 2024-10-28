@@ -103,6 +103,23 @@ class Database:
             h_log.create_log(2, "handlers.database.get_collection", f"Failed to get collection '{collection_name}'. Reason: Database error - {str(e)}")
             return (False, f"Database error - {str(e)}")
     
+    @classmethod
+    @retry(2)
+    def get_colletion_item_sorted(cls, collection_name: str, additional_query: dict = {}, sort_field: str = 'timestamp', ammount_of_items: int = 1):
+        h_log.create_log(5,"handlers.database.get_colletion_item_sorted", f"Attempting to retrieve {ammount_of_items} items from collection '{collection_name}' with sorting field {sort_field}")
+        try:
+            collection = cls._client['HelplineSupervisor'][collection_name]
+            result = list(collection.find(additional_query).sort(sort_field, 1).limit(ammount_of_items))
+            for item in result:
+                item["id"] = str(item['_id'])
+                del item["_id"]
+            h_log.create_log(5,"handlers.database.get_colletion_item_sorted", f"Successfully retrived {len(result)}/{ammount_of_items} items from collection '{collection_name}' with sorting field {sort_field}")
+            return (True, result)
+        except Exception as e:
+            error_str = f"Database connection failed. Reason: Unknown - {e}"
+            h_log.create_log(2,"handlers.database.get_collection", error_str)
+            return (False, error_str)
+
     @classmethod 
     @retry(2)   
     def delete_collection(cls, collection_name: str, filter: dict = None) -> tuple:
@@ -120,3 +137,17 @@ class Database:
         except Exception as e:
             h_log.create_log(5, "handlers.database.delete_collection", f"Failed to delete '{collection_name}'. Reason: {str(e)}")
             return (False, f"Failed to delete '{collection_name}'. Reason: {str(e)}")
+
+    @classmethod
+    @retry(2)
+    def change_kv_pair(cls, collection_name: str, filter: dict, key: str, new_value) -> tuple:
+        h_log.create_log(5,"handlers.database.change_kv_pair", f"Attempting to change kv pair in collection '{collection_name}'")
+        try:
+            collection = cls._client['HelplineSupervisor'][collection_name]
+            result = collection.update_one(filter, {"$set": {key: new_value}})
+            h_log.create_log(5,"handlers.database.change_kv_pair", f"Successfully changed kv pair in collection '{collection_name}'")
+            return (True, None)
+        except Exception as e:
+            error_str = f"Database connection failed. Reason: Unknown - {e}"
+            h_log.create_log(2,"handlers.database.change_kv_pair", error_str)
+            return (False, error_str)

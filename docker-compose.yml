@@ -3,6 +3,7 @@ services:
     build: ./service-audio_prospector
     volumes:
       - ./shared:/app/shared
+      - ./test:/app/test
     environment:
       - PYTHONUNBUFFERED=1
     ports:

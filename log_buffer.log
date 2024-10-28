@@ -1,44 +1,64 @@
-2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
-2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 14:52:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 14:52:56 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 14:52:56 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
-2024/10/25 14:52:56 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
-2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
-2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:22 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:23 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:23 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
-2024/10/25 15:05:23 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
-2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
-2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:48 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:49 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:05:49 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
-2024/10/25 15:05:49 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
-2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
-2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:06:05 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:06:06 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
-2024/10/25 15:06:06 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
-2024/10/25 15:06:06 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
-2024/10/25 15:06:06 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._api_start | Passing configuration to api object and startning api server
-2024/10/25 15:06:20 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 1 get /api/speechrecognizer/status
-2024/10/25 15:06:20 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 1 get /api/speechrecognizer/status
-2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 2 post /api/speechrecognizer/start
-2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to start job with configuration: {'azure_api_key': 'string', 'azure_region': 'string', 'azure_language': 'string', 'max_simultaneous_connections': 0}
-2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to verify current job status
-2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Current job status is IDLE
-2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Creating job thread
-2024/10/25 15:06:29 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Starting job thread
-2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Successfully started job with configuration: {'azure_api_key': 'string', 'azure_region': 'string', 'azure_language': 'string', 'max_simultaneous_connections': 0}
-2024/10/25 15:06:29 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 2 post /api/speechrecognizer/start
-2024/10/25 15:06:35 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 3 get /api/speechrecognizer/status
-2024/10/25 15:06:35 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 3 get /api/speechrecognizer/status
-2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 4 post /api/speechrecognizer/stop
-2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Attempting to stop job
-2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Attempting to verify current job status
-2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Current job status is RUNNING
-2024/10/25 15:06:45 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Setting job flag indicator to False
-2024/10/25 15:06:45 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_stop | Successfully stoped job
-2024/10/25 15:06:45 | WARN @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 4 post /api/speechrecognizer/stop
+2024/10/28 14:27:06 | DBUG @ Service: speech_recognizer & Function: handlers.logging.set_stdout_file | Setting logging stdout_file to True
+2024/10/28 14:27:06 | DBUG @ Service: speech_recognizer & Function: handlers.database.set_uri | Setting uri to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/28 14:27:06 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Attempting to connect to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/28 14:27:07 | DBUG @ Service: speech_recognizer & Function: handlers.database.initialize | Successfully connected to mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0
+2024/10/28 14:27:07 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully passed configuration to handlers
+2024/10/28 14:27:07 | INFO @ Service: speech_recognizer & Function: run.__main__ | Successfully started service speech_recognizer
+2024/10/28 14:27:07 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._api_start | Passing configuration to api object and startning api server
+2024/10/28 14:27:16 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 1 get /api/speechrecognizer/status
+2024/10/28 14:27:16 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 1 get /api/speechrecognizer/status
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | S: API hit no. 2 post /api/speechrecognizer/start
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to start job with configuration: {'azure_api_key': '49d697464acf452b81bdf153c368e3c6', 'azure_region': 'westeurope', 'azure_language': 'pl-PL', 'azure_timeout': 90}
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Attempting to verify current job status
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Current job status is IDLE
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Creating job thread
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer._job_start | Starting job thread
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Starting loop iteration no. 1
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer._job_start | Successfully started job with configuration: {'azure_api_key': '49d697464acf452b81bdf153c368e3c6', 'azure_region': 'westeurope', 'azure_language': 'pl-PL', 'azure_timeout': 90}
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | No cached files found
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer._api_routing | EOK: API hit no. 2 post /api/speechrecognizer/start
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Attempting to get files from database queue
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function get_colletion_item_sorted was passed to retry wrapper
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function get_colletion_item_sorted. Attempt 1 of 2
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.get_colletion_item_sorted | Attempting to retrieve 20 items from collection 'ap_results' with sorting field timestamp
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.get_colletion_item_sorted | Successfully retrived 20/20 items from collection 'ap_results' with sorting field timestamp
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function get_colletion_item_sorted. Attempt 1 of 2 was successful
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Successfully got respond from database queue. 20 entries cached
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | End of loop iteration no. 1 with status: OK
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Starting loop iteration no. 2
+2024/10/28 14:27:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Passing file {'path': 'test/20240119_040350_ETCR.wav', 'timestamp': datetime.datetime(2024, 10, 28, 13, 18, 42, 671000), 'attempts': 0, 'id': '671f8f32cc6e4f7b4c887769'} to recognizer object
+2024/10/28 14:27:25 | INFO @ Service: speech_recognizer & Function: azure.transcribe | Attempting to transcribe file: test/20240119_040350_ETCR.wav
+2024/10/28 14:28:55 | INFO @ Service: speech_recognizer & Function: azure.transcribe | Successfully transcribed file test/20240119_040350_ETCR.wav
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Attempting to save recognition result in database
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one was passed to retry wrapper
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one. Attempt 1 of 2
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.insert_one | Attempting to insert data into collection 'sr_results'
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.insert_one | Successfully inserted data into collection 'sr_results' with ID 671f91972f330c0b1ad138c7
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one. Attempt 1 of 2 was successful
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Successfully saved recognition result in database
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Attempting to delete already recognized file {'path': 'test/20240119_040350_ETCR.wav', 'timestamp': datetime.datetime(2024, 10, 28, 13, 18, 42, 671000), 'attempts': 0, 'id': '671f8f32cc6e4f7b4c887769'} entry from database 'ap_content' queue
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection was passed to retry wrapper
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection. Attempt 1 of 2
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.delete_collection | Attempting to delete collection 'ap_content' with filter '{'_id': ObjectId('671f8f32cc6e4f7b4c887769')}'
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: handlers.database.delete_collection | Successfully deleted 0 entries from 'ap_content'
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection. Attempt 1 of 2 was successful
+2024/10/28 14:28:55 | INFO @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Starting loop iteration no. 2
+2024/10/28 14:28:55 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Passing file {'path': 'test/20240119_030822_ETCD.wav', 'timestamp': datetime.datetime(2024, 10, 28, 13, 18, 42, 671000), 'attempts': 0, 'id': '671f8f32cc6e4f7b4c887763'} to recognizer object
+2024/10/28 14:28:55 | INFO @ Service: speech_recognizer & Function: azure.transcribe | Attempting to transcribe file: test/20240119_030822_ETCD.wav
+2024/10/28 14:30:25 | INFO @ Service: speech_recognizer & Function: azure.transcribe | Successfully transcribed file test/20240119_030822_ETCD.wav
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Attempting to save recognition result in database
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one was passed to retry wrapper
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one. Attempt 1 of 2
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.insert_one | Attempting to insert data into collection 'sr_results'
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.insert_one | Successfully inserted data into collection 'sr_results' with ID 671f91f12f330c0b1ad138c8
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function insert_one. Attempt 1 of 2 was successful
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Successfully saved recognition result in database
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Attempting to delete already recognized file {'path': 'test/20240119_030822_ETCD.wav', 'timestamp': datetime.datetime(2024, 10, 28, 13, 18, 42, 671000), 'attempts': 0, 'id': '671f8f32cc6e4f7b4c887763'} entry from database 'ap_content' queue
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection was passed to retry wrapper
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection. Attempt 1 of 2
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.delete_collection | Attempting to delete collection 'ap_content' with filter '{'_id': ObjectId('671f8f32cc6e4f7b4c887763')}'
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: handlers.database.delete_collection | Successfully deleted 0 entries from 'ap_content'
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: decorators.retry | Function delete_collection. Attempt 1 of 2 was successful
+2024/10/28 14:30:25 | INFO @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Starting loop iteration no. 2
+2024/10/28 14:30:25 | DBUG @ Service: speech_recognizer & Function: speech_recognizer.__job_loop | Passing file {'path': 'test/20240206_040818_EUWY.wav', 'timestamp': datetime.datetime(2024, 10, 28, 13, 18, 42, 671000), 'attempts': 0, 'id': '671f8f32cc6e4f7b4c88776f'} to recognizer object
+2024/10/28 14:30:25 | INFO @ Service: speech_recognizer & Function: azure.transcribe | Attempting to transcribe file: test/20240206_040818_EUWY.wav

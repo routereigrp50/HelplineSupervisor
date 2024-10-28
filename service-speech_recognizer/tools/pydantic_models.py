@@ -5,5 +5,5 @@ class SpeechRecognizerConfiguration(BaseModel):
     azure_api_key: str
     azure_region: str
     azure_language: str
-    max_simultaneous_connections: int
+    azure_timeout: int
 
