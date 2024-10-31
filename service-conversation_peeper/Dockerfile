@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY /handlers /app/handlers
 COPY /tools /app/tools
-COPY /speech_recognizer.py /app/speech_recognizer.py
+COPY /conversation_peeper.py /app/conversation_peeper.py
 COPY /run.py /app/run.py
 COPY /requirements.txt /app/requirements.txt
 

@@ -43,8 +43,8 @@ if __name__ == "__main__":
         try: h_log.set_stdout_console(configuration["logging"]['local']['audio_prospector']["stdout"]['console']['state']) 
         except KeyError: h_log.set_stdout_console(configuration['logging']['global']['stdout']['console']['state'])
 
-        #try: h_log.set_stdout_db(configuration["logging"]['local']['audio_prospector']["stdout"]['database']['state'],configuration['database']['mongo_db_uri']) 
-        #except KeyError: h_log.set_stdout_db(configuration['logging']['global']['stdout']['database']['state'],configuration['database']['mongo_db_uri'])
+        try: h_log.set_stdout_db(configuration["logging"]['local']['audio_prospector']["stdout"]['database']['state'],configuration['database']['mongo_db_uri']) 
+        except KeyError: h_log.set_stdout_db(configuration['logging']['global']['stdout']['database']['state'],configuration['database']['mongo_db_uri'])
 
         try: h_log.set_stdout_file_path(configuration["logging"]['local']['audio_prospector']["stdout"]['file']['file_path']) 
         except: h_log.set_stdout_file_path(configuration['logging']['global']['stdout']['file']['file_path'])

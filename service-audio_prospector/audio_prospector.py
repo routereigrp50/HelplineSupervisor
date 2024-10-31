@@ -150,7 +150,7 @@ class AudioProspector:
                                 raw_path = os.path.join(root, file)
                                 norm_path = os.path.normpath(raw_path)
                                 formated_path = norm_path.replace("\\","/")
-                                list_of_files.append(formated_path)
+                                list_of_files.append(f"./{formated_path}")
                 else:
                     h_log.create_log(2, "audio_prospector.__job_loop", f"Failed to scan for audio files. Reason: Configured audio path {self._job_configuration['path']} does not exist")
                     h_log.create_log(4, "audio_prospector.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")

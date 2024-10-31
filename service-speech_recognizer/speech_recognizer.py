@@ -214,5 +214,10 @@ class SpeechRecognizer:
                 time.sleep(self._job_error_counter*10)
                 self._job_loop_counter+=1
                 self._job_error_counter+=1
-                continue                
+                continue   
+
+            h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
+            self._job_loop_counter+=1
+            
+         
 
