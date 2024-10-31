@@ -14,6 +14,7 @@ services:
     build: ./service-speech_recognizer
     volumes:
       - ./shared:/app/shared
+      - ./test:/app/test
     environment:
       - PYTHONUNBUFFERED=1
     ports:

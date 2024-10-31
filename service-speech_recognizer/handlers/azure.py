@@ -39,11 +39,12 @@ class Azure:
 
             #TIMEOUT HANDLING: WAIT FOR THE TRANSCRIPTION TO COMPLETE OR FOR TIMEOUT
             start_time = time.time()
-            while not self.done or (time.time() - start_time) < self.timeout:
+            while not self.done and (time.time() - start_time) < self.timeout:
                 time.sleep(0.5)
             
             #CHECK IF TRANSCRIPTION WAS SUCCESSFUL OR IF IT TIMED OUT
             if not self.done:
+                self.recognizer.stop_transcribing_async()
                 self.failed = True
                 self.fail_reason = "Transcription timed out"
                 h_log.create_log(3, "azure.transcribe", f"Failed to transcribe file {self.audio_path}. Reason: Transcription timed out")
@@ -63,17 +64,25 @@ class Azure:
         '''
         FUNCTION: CONNECT EVENT HANDLERS FOR TRANSCRIPTION EVENTS
         '''
-        self.recognizer.transcribed.connect(self._handle_final_result)
-        self.recognizer.session_stopped.connect(self._stop_cb)
-        self.recognizer.canceled.connect(self._stop_cb)
+        self.recognizer.session_started.connect(self._azure_callback_start)
+        self.recognizer.transcribed.connect(self._azure_callback_handle_final_result)
+        self.recognizer.canceled.connect(self._azure_callback_stop)
+        
 
-    def _stop_cb(self, evt) -> None:
+    def _azure_callback_start(self, evt) -> None:
+        '''
+        FUNCTION: CALLBACK FOR STARTING THE TRANSCRIPTION
+        '''
+        h_log.create_log(5, "azure._azure_callback_start", f"Transcription of file: {self.audio_path} started")
+
+    def _azure_callback_stop(self, evt) -> None:
         '''
         FUNCTION: CALLBACK FOR STOPPING THE TRANSCRIPTION
         '''
+        h_log.create_log(5, "azure._azure_callback_stop", f"Transcription of file: {self.audio_path} ended with status Success")
         self.done = True
     
-    def _handle_final_result(self, evt) -> None:
+    def _azure_callback_handle_final_result(self, evt) -> None:
         '''
         FUNCTION: HANDLE THE FINAL RESULT FROM EACH TRANSCRIPTION EVENT, ASSIGNING ALTERNATELY TO TWO SPEAKERS
         '''
