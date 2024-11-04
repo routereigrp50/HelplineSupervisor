@@ -160,6 +160,7 @@ class SpeechRecognizer:
                     h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK. Sleeptime before next iteration: 60.")
                     time.sleep(60)
                     self._job_loop_counter+=1
+                    continue
                 h_log.create_log(5, "speech_recognizer.__job_loop",f"Successfully got respond from database queue. {len(db_content)} entries cached")
                 self._job_chached_queue = db_content
                 h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
@@ -168,7 +169,8 @@ class SpeechRecognizer:
             '''
             SECTION: RECOGNIZE
             '''
-            file = self._job_chached_queue.pop(1)
+            print(self._job_chached_queue)
+            file = self._job_chached_queue.pop(0)
             h_log.create_log(5,"speech_recognizer.__job_loop", f"Passing file {file} to recognizer object")
             recognizer = Azure(azure_api_key=self._job_configuration['azure_api_key'],
                                azure_region=self._job_configuration['azure_region'],
