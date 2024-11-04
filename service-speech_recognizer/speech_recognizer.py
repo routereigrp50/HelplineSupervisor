@@ -169,7 +169,6 @@ class SpeechRecognizer:
             '''
             SECTION: RECOGNIZE
             '''
-            print(self._job_chached_queue)
             file = self._job_chached_queue.pop(0)
             h_log.create_log(5,"speech_recognizer.__job_loop", f"Passing file {file} to recognizer object")
             recognizer = Azure(azure_api_key=self._job_configuration['azure_api_key'],
@@ -198,7 +197,8 @@ class SpeechRecognizer:
             SECTION: SAVE RESULTS IN DB
             '''
             h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition result in database")
-            db_insert_result, db_insert_content = h_db.insert_one("sr_results",{"path":file['path'],"result":recognition_content})
+            current_timestamp = datetime.now(timezone.utc)
+            db_insert_result, db_insert_content = h_db.insert_one("sr_results",{"path":file['path'],"result":recognition_content,"timestamp":current_timestamp})
             if not db_insert_result:
                 h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to save recognition result in database. File {file['path']} will not be deleted from 'ap_results' queue. Re-recognition will be attempted after cache reload. Reason {str(db_insert_content)}")
                 h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")

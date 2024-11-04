@@ -31,7 +31,7 @@ class ConversationPeeper:
         self._job_configuration = {}
         self._job_loop_counter = 1
         self._job_error_counter = 1
-        self._job_chached_queue = []
+        self._job_cached_queue = []
         '''
         CLASS STATUS - THIS VALUE VILL BE QUESTIONED IN TASKS
         '''
@@ -144,10 +144,33 @@ class ConversationPeeper:
             '''
             SECTION: GET FILE FROM Q
             '''
-            print(":-)")
-            time.sleep(5)
-            h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
-            self._job_loop_counter+=1
-            
+            if not self._job_cached_queue: #IF THERE ARE NO CACHED ENTRIES
+                h_log.create_log(5, "conversation_peeper.__job_loop", f"No cached files found")
+                h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to get files from database queue")
+                db_result, db_content = h_db.get_colletion_item_sorted("sr_results",sort_field="timestamp",ammount_of_items=20)
+                if not db_result: #IF FAILED TO GET ENTRIES FROM DB
+                    h_log.create_log(2, "conversation_peeper.__job_loop", f"Failed to get files from database queue. Reason: {str(db_content)}")
+                    h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
+                    time.sleep(self._job_error_counter*10)
+                    self._job_loop_counter+=1
+                    self._job_error_counter+=1
+                    continue
+                if len(db_content) == 0: #IF QUEUE IS EMPTY
+                    h_log.create_log(5, "conversation_peeper.__job_loop",f"Successfully got respond from database queue. No files return, queue is empty")
+                    h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK. Sleeptime before next iteration: 60.")
+                    time.sleep(60)
+                    self._job_loop_counter+=1
+                    continue
+                h_log.create_log(5, "conversation_peeper.__job_loop",f"Successfully got respond from database queue. {len(db_content)} entries cached")
+                self._job_cached_queue = db_content
+                h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
+                self._job_loop_counter+=1
+                continue
+            '''
+            SECTION: PEEP
+            '''
+            file = self._job_cached_queue.pop(0)
+            h_log.create_log(5, "conversation_peeper.__job_loop",f"Passing file: {file['filename']} to converastion peeper object")
+            #...
          
 
