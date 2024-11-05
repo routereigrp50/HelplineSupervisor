@@ -1,5 +1,5 @@
 from handlers.logging import Logging as h_log
-from tools.decorators import retry
+from shared.tools.decorators import retry
 import pymongo
 import pymongo.errors
 from bson import ObjectId

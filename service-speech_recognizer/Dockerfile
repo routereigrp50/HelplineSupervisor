@@ -3,7 +3,6 @@ FROM python:3.11-slim
 WORKDIR /app
 
 COPY /handlers /app/handlers
-COPY /tools /app/tools
 COPY /speech_recognizer.py /app/speech_recognizer.py
 COPY /run.py /app/run.py
 COPY /requirements.txt /app/requirements.txt

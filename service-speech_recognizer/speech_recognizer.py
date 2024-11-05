@@ -1,8 +1,8 @@
 from handlers.logging import Logging as h_log
 from handlers.database import Database as h_db
 from handlers.azure import Azure
-from tools.pydantic_models import SpeechRecognizerConfiguration
-from tools.decorators import retry
+from shared.tools.pydantic_models import SpeechRecognizerConfiguration
+from shared.tools.decorators import retry
 import threading
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Request
@@ -179,6 +179,17 @@ class SpeechRecognizer:
             recognition_result, recognition_content = recognizer.transcribe()
             if not recognition_result: #IF FAILED TO RECOGNIZE -> INCREASE ATTEMPTS IN DB
                 h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to regonize file {file}. Reason: {str(recognition_content)}")
+
+                #BRIEF UPDATE FAILED
+                h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition brief info in database")
+                db_insert_result, db_insert_content = h_db.insert_one("sr_results_brief", {"path":file['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(recognition_content)})
+                if not db_insert_result:
+                    h_log.create_log(5, "speech_recognizer.__job_loop", f"Failed to save recognition brief info in database")
+                    self._job_error_counter+=1
+                    #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
+                else:
+                    h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition brief info in database")
+
                 attemp_counter = file['attempts']
                 attemp_counter += 1
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to increase 'attempts' filed for file {file} in database")
@@ -197,6 +208,7 @@ class SpeechRecognizer:
             '''
             SECTION: SAVE RESULTS IN DB
             '''
+            #SAVE BRIEF RESULT
             h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition result in database")
             current_timestamp = datetime.now(timezone.utc)
             db_insert_result, db_insert_content = h_db.insert_one("sr_results",{"path":file['path'],"result":recognition_content,"timestamp":current_timestamp})
@@ -209,6 +221,17 @@ class SpeechRecognizer:
                 continue
             h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition result in database")
 
+            #SAVE BRIEF RESULT
+            h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition brief info in database")
+            db_insert_result, db_insert_content = h_db.insert_one("sr_results_brief", {"path":file['path'],"result":recognition_content,"timestamp":current_timestamp,"status":"Success"})
+            if not db_insert_result:
+                h_log.create_log(5, "speech_recognizer.__job_loop", f"Failed to save recognition brief info in database")
+                self._job_error_counter+=1
+                #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
+            else:    
+                h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition brief info in database")
+
+            #DELETE FILE FROM DB Q
             h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to delete already recognized file {file} entry from database 'ap_results' queue")
             db_pop_result, db_pop_content = h_db.delete_collection("ap_results",{"_id":ObjectId(file['id'])})
             if not db_pop_result:

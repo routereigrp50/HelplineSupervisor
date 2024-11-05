@@ -1,5 +1,9 @@
 {
     "api":{
+        "jobs_supervisor":{
+            "ip":"0.0.0.0",
+            "port":5000
+        },
         "audio_prospector":{
             "ip":"0.0.0.0",
             "port":5001
@@ -20,7 +24,7 @@
 
     "logging":{
         "global":{
-            "debugging":false,
+            "debugging":true,
             "stdout":{
                 "console":{
                     "state":true
@@ -35,6 +39,7 @@
             }
         },
         "local":{
+            "jobs_supervisor":{},
             "audio_prospector":{},
             "speech_recognizer":{},
             "conversation_peeper":{}

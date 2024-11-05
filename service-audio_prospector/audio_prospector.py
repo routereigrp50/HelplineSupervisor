@@ -1,7 +1,7 @@
 from handlers.logging import Logging as h_log
 from handlers.database import Database as h_db
-from tools.pydantic_models import AudioProspectorConfiguration
-from tools.decorators import retry
+from shared.tools.pydantic_models import AudioProspectorConfiguration
+from shared.tools.decorators import retry
 import threading
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Request

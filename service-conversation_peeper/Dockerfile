@@ -3,7 +3,6 @@ FROM python:3.11-slim
 WORKDIR /app
 
 COPY /handlers /app/handlers
-COPY /tools /app/tools
 COPY /conversation_peeper.py /app/conversation_peeper.py
 COPY /run.py /app/run.py
 COPY /requirements.txt /app/requirements.txt

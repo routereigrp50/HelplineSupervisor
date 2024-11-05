@@ -1,7 +1,7 @@
 from handlers.logging import Logging as h_log
 from handlers.database import Database as h_db
-from tools.pydantic_models import ConversationPeeperConfiguration
-from tools.decorators import retry
+from shared.tools.pydantic_models import ConversationPeeperConfiguration
+from shared.tools.decorators import retry
 import threading
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Request
@@ -175,6 +175,16 @@ class ConversationPeeper:
             call_result, call_content = self._call_azure_api(file['result'])
             if not call_result:
                 h_log.create_log(2, "conversation_peeper.__job_loop", f"Failed to peep file {file['path']}, Reason: {str(call_content)}")
+                #SAVE BRIEF RESULT
+                h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to save peep brief info in database")
+                db_insert_result, db_insert_content = h_db.insert_one("cp_results_brief", {"path":file['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(call_content)})
+                if not db_insert_result:
+                    h_log.create_log(5, "conversation_peeper.__job_loop", f"Failed to save peep brief info in database")
+                    self._job_error_counter+=1
+                    #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
+                else:
+                    h_log.create_log(5, "conversation_peeper.__job_loop", f"Successfully saved peep brief info in database")
+
                 h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
                 time.sleep(self._job_error_counter*10)
                 self._job_loop_counter+=1
@@ -184,6 +194,7 @@ class ConversationPeeper:
             '''
             SECTION: SAVE RESULTS IN DB
             '''
+            #SAVE GENERAL RESULT
             h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to save recognition result in database")
             current_timestamp = datetime.now(timezone.utc)
             db_insert_result, db_insert_content = h_db.insert_one("cp_results",{"path":file['path'],"timestamp":current_timestamp,"result":call_content})
@@ -196,6 +207,17 @@ class ConversationPeeper:
                 continue
             h_log.create_log(5, "conversation_peeper.__job_loop", f"Successfully saved peep result in database")
 
+            #SAVE BRIEF RESULT
+            h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to save recognition peep info in database")
+            db_insert_result, db_insert_content = h_db.insert_one("cp_results_brief", {"path":file['path'],"result":call_content,"timestamp":current_timestamp,"status":"Success"})
+            if not db_insert_result:
+                h_log.create_log(5, "conversation_peeper.__job_loop", f"Failed to save recognition peep info in database")
+                self._job_error_counter+=1
+                #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
+            else:    
+                h_log.create_log(5, "conversation_peeper.__job_loop", f"Successfully saved recognition peep info in database")
+
+            #DELETE FILE FROM DB Q
             h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to delete already rated file {file['path']} from database 'sr_results'")
             db_pop_result, db_pop_content = h_db.delete_collection("sr_results", {"_id":ObjectId(file['id'])})
             if not db_pop_result:
@@ -207,7 +229,7 @@ class ConversationPeeper:
                 continue  
             h_log.create_log(5, "conversation_peeper.__job_loop", f"Successfullt deleted already rated file {file['path']} from database 'sr_results'")
 
-            h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
+            h_log.create_log(4, "conversation_peeper.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
             self._job_loop_counter+=1
             
                         
