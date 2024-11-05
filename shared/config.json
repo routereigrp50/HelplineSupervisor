@@ -17,9 +17,9 @@
             "port":5003
         }
     },
-
+    
     "database":{
-        "mongo_db_uri":"mongodb+srv://netxp:8FrLLDKDLicb9g9r@c0.btzz4an.mongodb.net/?retryWrites=true&w=majority&appName=C0"
+        "mongo_db_uri":""
     },
 
     "logging":{

@@ -1,4 +1,5 @@
 services:
+
   job-audio_prospector:
     build: ./service-audio_prospector
     volumes:
@@ -10,6 +11,7 @@ services:
       - "5001:5001"
     networks:
       - app-network
+
   job-speech_recognizer:
     build: ./service-speech_recognizer
     volumes:
@@ -21,6 +23,7 @@ services:
       - "5002:5002"
     networks:
       - app-network
+
   job-conversation_peeper:
     build: ./service-conversation_peeper
     volumes:
@@ -31,6 +34,7 @@ services:
       - "5003:5003"
     networks:
       - app-network
+
 networks:
   app-network:
     driver: bridge
