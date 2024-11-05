@@ -31,7 +31,7 @@ class SpeechRecognizer:
         self._job_configuration = {}
         self._job_loop_counter = 1
         self._job_error_counter = 1
-        self._job_chached_queue = []
+        self._job_cached_queue = []
         '''
         CLASS STATUS - THIS VALUE VILL BE QUESTIONED IN TASKS
         '''
@@ -144,7 +144,7 @@ class SpeechRecognizer:
             '''
             SECTION: GET FILE FROM Q
             '''
-            if not self._job_chached_queue: #IF THERE ARE NO CACHED ENTRIES
+            if not self._job_cached_queue: #IF THERE ARE NO CACHED ENTRIES
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"No cached files found")
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to get files from database queue")
                 db_result, db_content = h_db.get_colletion_item_sorted("ap_results",additional_query={"attempts":{"$lt":3}},sort_field="timestamp",ammount_of_items=20)
@@ -162,15 +162,15 @@ class SpeechRecognizer:
                     self._job_loop_counter+=1
                     continue
                 h_log.create_log(5, "speech_recognizer.__job_loop",f"Successfully got respond from database queue. {len(db_content)} entries cached")
-                self._job_chached_queue = db_content
+                self._job_cached_queue = db_content
                 h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
                 self._job_loop_counter+=1
                 continue
             '''
             SECTION: RECOGNIZE
             '''
-            file = self._job_chached_queue.pop(0)
-            h_log.create_log(5,"speech_recognizer.__job_loop", f"Passing file {file} to recognizer object")
+            file = self._job_cached_queue.pop(0)
+            h_log.create_log(5,"speech_recognizer.__job_loop", f"Attempting to recognize {file}")
             recognizer = Azure(azure_api_key=self._job_configuration['azure_api_key'],
                                azure_region=self._job_configuration['azure_region'],
                                azure_language=self._job_configuration['azure_language'],
@@ -193,6 +193,7 @@ class SpeechRecognizer:
                 h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
                 self._job_loop_counter+=1
                 continue
+            h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully recognized file {file}")
             '''
             SECTION: SAVE RESULTS IN DB
             '''
@@ -217,6 +218,7 @@ class SpeechRecognizer:
                 self._job_loop_counter+=1
                 self._job_error_counter+=1
                 continue   
+            h_log.create_log(5, "speech_recognizer.__job_loop", f"Siccessfully deleted already recognized file {file} entru from database 'ap_results")
 
             h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
             self._job_loop_counter+=1

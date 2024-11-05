@@ -21,7 +21,16 @@ services:
       - "5002:5002"
     networks:
       - app-network
-
+  job-conversation_peeper:
+    build: ./service-conversation_peeper
+    volumes:
+      - ./shared:/app/shared
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5003:5003"
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge

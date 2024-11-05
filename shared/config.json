@@ -20,13 +20,13 @@
 
     "logging":{
         "global":{
-            "debugging":true,
+            "debugging":false,
             "stdout":{
                 "console":{
                     "state":true
                 },
                 "database":{
-                    "state":true
+                    "state":false
                 },
                 "file":{
                     "state":true,
