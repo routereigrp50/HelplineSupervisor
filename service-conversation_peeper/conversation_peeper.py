@@ -176,6 +176,7 @@ class ConversationPeeper:
             if not call_result:
                 h_log.create_log(2, "conversation_peeper.__job_loop", f"Failed to peep file {file['path']}, Reason: {str(call_content)}")
                 #SAVE BRIEF RESULT
+                current_timestamp = datetime.now(timezone.utc)
                 h_log.create_log(5, "conversation_peeper.__job_loop", f"Attempting to save peep brief info in database")
                 db_insert_result, db_insert_content = h_db.insert_one("cp_results_brief", {"path":file['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(call_content)})
                 if not db_insert_result:

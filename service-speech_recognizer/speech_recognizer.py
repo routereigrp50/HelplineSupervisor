@@ -181,6 +181,7 @@ class SpeechRecognizer:
                 h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to regonize file {file}. Reason: {str(recognition_content)}")
 
                 #BRIEF UPDATE FAILED
+                current_timestamp = datetime.now(timezone.utc)
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition brief info in database")
                 db_insert_result, db_insert_content = h_db.insert_one("sr_results_brief", {"path":file['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(recognition_content)})
                 if not db_insert_result:

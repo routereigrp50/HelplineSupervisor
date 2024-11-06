@@ -1,9 +1,5 @@
 {
     "api":{
-        "jobs_supervisor":{
-            "ip":"0.0.0.0",
-            "port":5000
-        },
         "audio_prospector":{
             "ip":"0.0.0.0",
             "port":5001
@@ -19,7 +15,7 @@
     },
     
     "database":{
-        "mongo_db_uri":""
+        "mongo_db_uri":"mongodb+srv://netxp:netxp@c0.biwgc.mongodb.net/"
     },
 
     "logging":{
