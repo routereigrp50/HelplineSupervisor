@@ -15,7 +15,7 @@
     },
     
     "database":{
-        "mongo_db_uri":"mongodb+srv://netxp:netxp@c0.biwgc.mongodb.net/"
+        "mongo_db_uri":""
     },
 
     "logging":{
