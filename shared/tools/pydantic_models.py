@@ -15,3 +15,4 @@ class SpeechRecognizerConfiguration(BaseModel):
     azure_region: str
     azure_language: str
     azure_timeout: int
+    azure_concurrent_connections: int

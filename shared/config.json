@@ -1,9 +1,5 @@
 {
     "api":{
-        "jobs_supervisor":{
-            "ip":"0.0.0.0",
-            "port":5000
-        },
         "audio_prospector":{
             "ip":"0.0.0.0",
             "port":5001

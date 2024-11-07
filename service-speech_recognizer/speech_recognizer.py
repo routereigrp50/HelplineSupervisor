@@ -4,6 +4,7 @@ from handlers.azure import Azure
 from shared.tools.pydantic_models import SpeechRecognizerConfiguration
 from shared.tools.decorators import retry
 import threading
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -147,7 +148,7 @@ class SpeechRecognizer:
             if not self._job_cached_queue: #IF THERE ARE NO CACHED ENTRIES
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"No cached files found")
                 h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to get files from database queue")
-                db_result, db_content = h_db.get_colletion_item_sorted("ap_results",additional_query={"attempts":{"$lt":3}},sort_field="timestamp",ammount_of_items=20)
+                db_result, db_content = h_db.get_colletion_item_sorted("ap_results",additional_query={"attempts":{"$lt":3}},sort_field="timestamp",ammount_of_items=self._job_configuration['azure_concurrent_connections']*10)
                 if not db_result: #IF FAILED TO GET ENTRIES FROM DB
                     h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to get files from database queue. Reason: {str(db_content)}")
                     h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
@@ -169,82 +170,85 @@ class SpeechRecognizer:
             '''
             SECTION: RECOGNIZE
             '''
-            file = self._job_cached_queue.pop(0)
-            h_log.create_log(5,"speech_recognizer.__job_loop", f"Attempting to recognize {file}")
-            recognizer = Azure(azure_api_key=self._job_configuration['azure_api_key'],
-                               azure_region=self._job_configuration['azure_region'],
-                               azure_language=self._job_configuration['azure_language'],
-                               audio_path=file['path'],
-                               timeout=self._job_configuration['azure_timeout'])
-            recognition_result, recognition_content = recognizer.transcribe()
-            if not recognition_result: #IF FAILED TO RECOGNIZE -> INCREASE ATTEMPTS IN DB
-                h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to regonize file {file}. Reason: {str(recognition_content)}")
-
-                #BRIEF UPDATE FAILED
-                h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition brief info in database")
-                db_insert_result, db_insert_content = h_db.insert_one("sr_results_brief", {"path":file['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(recognition_content)})
-                if not db_insert_result:
-                    h_log.create_log(5, "speech_recognizer.__job_loop", f"Failed to save recognition brief info in database")
-                    self._job_error_counter+=1
-                    #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
-                else:
-                    h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition brief info in database")
-
-                attemp_counter = file['attempts']
-                attemp_counter += 1
-                h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to increase 'attempts' filed for file {file} in database")
-                update_result, update_content = h_db.change_kv_pair("ap_results",{"_id":ObjectId(file['id'])},"attempts",attemp_counter)
-                if not update_result: #IF FAILED TO INCREASE ATTEMPTS FIELD
-                    h_log.create_log(1, "speech_recognizer.__job_loop", f"Failed to increase 'attempts' field for file {file} in database. Reason: {str(update_content)}")
-                    h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK")
-                    self._job_loop_counter+=1
-                    self._job_error_counter+=1
-                    continue
-                h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully increased 'attempts' filed for file {file} in database")
-                h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
-                self._job_loop_counter+=1
-                continue
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully recognized file {file}")
+            #CHCEK IF DESIRED CONNECTION AMMOUNT ISNT BIGGER THAN CACHED QUEUE
+            connection_ammount = self._job_configuration['azure_concurrent_connections']
+            if int(self._job_configuration['azure_concurrent_connections']) > len(self._job_cached_queue):
+                h_log.create_log(3, "speech_recongizer.__job_loop", f"Desired connection ammount is bigger than cached queue. Changing connection ammount for this iteration to {len(self._job_cached_queue)}")
+                connection_ammount = len(self._job_cached_queue)
+            
+            #PREPARE FILES
+            local_file_q = []
+            for _ in range(connection_ammount):
+                file = self._job_cached_queue.pop(0)
+                local_file_q.append(file)
+            
+            #RECOGNIZE SEGMENT
+            with ThreadPoolExecutor(max_workers=self._job_configuration['azure_concurrent_connections']) as executor:
+                futures = []
+                results = []
+                for element in local_file_q:
+                    thread = executor.submit(self._call_azure, element)
+                    futures.append(thread)
+                    h_log.create_log(5, "speech_recognizer.__job_loop", f"Creating recognition thread for {element['path']}")
+                for future in as_completed(futures):
+                    results.append(future.result())
+                    h_log.create_log(4, "speech_recognizer.__job_loop", f"Recognition thread ended job. Acutal stuts: {len(results)}/{len(local_file_q)}")
             '''
             SECTION: SAVE RESULTS IN DB
             '''
-            #SAVE BRIEF RESULT
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition result in database")
-            current_timestamp = datetime.now(timezone.utc)
-            db_insert_result, db_insert_content = h_db.insert_one("sr_results",{"path":file['path'],"result":recognition_content,"timestamp":current_timestamp})
-            if not db_insert_result:
-                h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to save recognition result in database. File {file['path']} will not be deleted from 'ap_results' queue. Re-recognition will be attempted after cache reload. Reason {str(db_insert_content)}")
-                h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
-                time.sleep(self._job_error_counter*10)
-                self._job_loop_counter+=1
-                self._job_error_counter+=1
-                continue
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition result in database")
-
-            #SAVE BRIEF RESULT
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to save recognition brief info in database")
-            db_insert_result, db_insert_content = h_db.insert_one("sr_results_brief", {"path":file['path'],"result":recognition_content,"timestamp":current_timestamp,"status":"Success"})
-            if not db_insert_result:
-                h_log.create_log(5, "speech_recognizer.__job_loop", f"Failed to save recognition brief info in database")
-                self._job_error_counter+=1
-                #BRIEF INFO IS NOT THAT IMPORTANT, NO NEED TO RELOAD LOOP AFTER THIS FAIL
-            else:    
-                h_log.create_log(5, "speech_recognizer.__job_loop", f"Successfully saved recognition brief info in database")
-
-            #DELETE FILE FROM DB Q
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to delete already recognized file {file} entry from database 'ap_results' queue")
-            db_pop_result, db_pop_content = h_db.delete_collection("ap_results",{"_id":ObjectId(file['id'])})
-            if not db_pop_result:
-                h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to delete already recognized file {file} entry from database 'ap_results' queue. This database error will lead to unnecesary re-recognition of this file. Reason: {str(db_pop_content)}")
-                h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: NOK. Sleeptime before next iteration: {self._job_error_counter*10}. Time extended due to NOK")
-                time.sleep(self._job_error_counter*10)
-                self._job_loop_counter+=1
-                self._job_error_counter+=1
-                continue   
-            h_log.create_log(5, "speech_recognizer.__job_loop", f"Siccessfully deleted already recognized file {file} entru from database 'ap_results")
+            for result in results:
+                recognition_element, recognition_result, recognition_content = result
+                current_timestamp = datetime.now(timezone.utc)
+                h_log.create_log(5, "speech_recognizer.__job_loop", f"Attempting to update database information for {recognition_element}")
+                if not recognition_result:
+                    #BRIEF UPDATE
+                    db_brief_fail_result, db_brief_fail_content = h_db.insert_one("sr_results_brief", {"path":recognition_element['path'],"timestamp":current_timestamp,"status":"Failed","reason":str(recognition_content)})
+                    if not db_brief_fail_result:
+                        h_log.create_log(2, "speech_recognizer._joob_loop", f"Failed to save recognition brief informations in database for entry {recognition_element}. Reason: {str(db_brief_fail_content)}")
+                        self._job_error_counter += 1
+                    #KV CHANGE += ATTEMPTS
+                    attempt_counter = recognition_element['attempts']
+                    attempt_counter += 1
+                    kv_update_result, kv_update_content = h_db.change_kv_pair("ap_results",{"_id":ObjectId(recognition_element['id'])},"attempts",attempt_counter)
+                    if not kv_update_result:
+                        h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to update 'attempts' counter in database for entry {recognition_element}. This will lead to unplanned extra recognition attempt for this entry. Reason: {str(kv_update_content)}")
+                        self._job_error_counter += 1
+                else:
+                    #BRIEF UPDATE
+                    db_brief_succ_result, db_brief_succ_content = h_db.insert_one("sr_results_brief", {"path":recognition_element['path'],"result":recognition_content,"timestamp":current_timestamp,"status":"Success"})
+                    if not db_brief_succ_result:
+                        h_log.create_log(2, "speech_recognizer._joob_loop", f"Failed to save recognition brief informations in database for entry {recognition_element}. Reason: {str(db_brief_succ_content)}")
+                        self._job_error_counter += 1
+                    #CONTENT UPDATE
+                    db_insert_result, db_insert_content = h_db.insert_one("sr_results",{"path":recognition_element['path'],"result":recognition_content,"timestamp":current_timestamp})
+                    if not db_insert_result:
+                        h_log.create_log(2, "speech_recognizer.__job_loop", f"Failed to save recognition result in database for entry {recognition_element}. Reason: {str(db_insert_content)}")
+                        self._job_error_counter += 1
+                        h_log.create_log(5, "speech_recognizer.__job_loop", f"Ended of database information update for {recognition_element}")
+                        continue
+                        #IF RESULT NOT SAVED CONTINUE LOOP ITERATION AND DONT DELETE THIS ENTRY FORM Q TO AVOID MISSING FILE
+                    #DELETE FROM Q
+                    db_pop_result, db_pop_content = h_db.delete_collection("ap_results",{"_id":ObjectId(recognition_element['id'])})
+                    if not db_pop_result:
+                        h_log.create_log(2, "speech_recognizer._joob_loop", f"Failed to delete entry from queue 'ap_results'. Element: {recognition_element}. Reason: {str(db_pop_content)}")
+                        self._job_error_counter += 1
+                h_log.create_log(5, "speech_recognizer.__job_loop", f"Ended of database information update for {recognition_element}")
 
             h_log.create_log(4, "speech_recognizer.__job_loop", f"End of loop iteration no. {self._job_loop_counter} with status: OK")
             self._job_loop_counter+=1
             
          
-
+    def _call_azure(self, file_dict: dict) -> tuple:
+        """
+        FUNCTION: CALL TO AZURE INTERFACE
+        """
+        try:
+            recognizer = Azure(azure_api_key=self._job_configuration['azure_api_key'],
+                            azure_region=self._job_configuration['azure_region'],
+                            azure_language=self._job_configuration['azure_language'],
+                            audio_path=file_dict['path'],
+                            timeout=self._job_configuration['azure_timeout'])
+            recognition_result, recognition_content = recognizer.transcribe()
+            return (file_dict, recognition_result, recognition_content)
+        except Exception as e:
+            return (file_dict, False, str(e))#
